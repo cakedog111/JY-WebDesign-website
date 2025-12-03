@@ -512,9 +512,19 @@ document.querySelectorAll('a[href*="#"]').forEach(anchor => {
     const url = new URL(this.href);
     if (url.pathname === window.location.pathname && url.hash) {
       e.preventDefault();
+
+      // If mobile menu is open, close it first
+      if (!mobileHeader.classList.contains('translate-x-full')) {
+        mobileHeader.classList.add('translate-x-full');
+        document.body.classList.remove('fixed'); // restore scrolling
+      }
+
       const target = document.querySelector(url.hash);
       if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
+        // Give menu time to close
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }, 100); // 100ms delay usually works
       }
     }
   });
